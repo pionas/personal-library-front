@@ -1,0 +1,36 @@
+{
+  "name": "library-lists-books-finished",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "@apollo/client": "3.0.0-beta.34",
+    "@chakra-ui/core": "0.7.0",
+    "@emotion/core": "10.0.28",
+    "@emotion/styled": "10.0.27",
+    "emotion-theming": "10.0.27",
+    "graphql": "14.6.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-router": "6.0.0-alpha.1",
+    "react-router-dom": "6.0.0-alpha.1",
+    "react-scripts": "3.0.1",
+    "slugify": "1.4.0"
+  },
+  "devDependencies": {
+    "typescript": "3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
