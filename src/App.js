@@ -52,11 +52,17 @@ export default function App() {
       <Routes>
         <Route path="/" element={<BooksPage />} />
         <Route path="books/:bookId" element={<BookDetailsPage />} />
-        <Route path="authors/" element={<AuthorsPage />} />
+        <Route path="books/search/:searchQuery" element={<BooksPage />} />
+        <Route path="books/search/" element={<BooksPage />} />
         <Route path="users/" element={<UsersPage />} />
         <Route path="users/:userId" element={<UserDetailsPage />} />
+        <Route path="users/search/:searchQuery" element={<UsersPage />} />
+        <Route path="users/search/" element={<UsersPage />} />
         <Route path="random/" element={<RandomPage />} />
+        <Route path="authors/" element={<AuthorsPage />} />
         <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
+        <Route path="authors/search/:searchQuery" element={<AuthorsPage />} />
+        <Route path="authors/search/" element={<AuthorsPage />} />
         <Route path="admin/anything/:anyId" element={<AnythingDetailsPage />} />
         <Route path="admin/everything" element={<EverythingPage />} />
       </Routes>
