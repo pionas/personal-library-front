@@ -11,7 +11,10 @@ const GRAPHQL_ENDPOINT = "https://ancient-badlands-11449.herokuapp.com/";
 
 const cache = new InMemoryCache({
   addTypename: true,
-  resultCaching: false
+  resultCaching: false,
+  possibleTypes: {
+    Anything: ["Book", "Author", "User"]
+  }
 });
 const client = new ApolloClient({
   uri: GRAPHQL_ENDPOINT,
