@@ -10,7 +10,7 @@ import App from "./App";
 const GRAPHQL_ENDPOINT = "https://ancient-badlands-11449.herokuapp.com/";
 
 const cache = new InMemoryCache({
-  addTypename: false,
+  addTypename: true,
   resultCaching: false
 });
 const client = new ApolloClient({

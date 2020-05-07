@@ -1,13 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Flex, Heading, Image } from "@chakra-ui/core";
-const slugHelper = require("../functions/SlugHelper");
+import { gql } from "@apollo/client";
 
-export default function Book({ id, title, cover, author }) {
-  let slug;
-  if (typeof author !== "undefined") {
-    slug = slugHelper.slug(author.name);
+export const BOOK_FIELDS_FRAGMENT = gql`
+  fragment bookFields on Book {
+    id
+    title
+    cover {
+      url
+    }
+    author {
+      name
+    }
   }
+`;
+export default function Book({ id, title, cover, author }) {
   return (
     <Flex
       mt="5"
@@ -23,11 +30,9 @@ export default function Book({ id, title, cover, author }) {
         <Heading as="h3" size="md" color="gray.700">
           {title}
         </Heading>
-        {typeof author !== "undefined" && (
-          <Heading as="h4" size="sm" color="gray.400">
-            <Link to={`/authors/${slug}`}>{author.name}</Link>
-          </Heading>
-        )}
+        <Heading as="h4" size="sm" color="gray.400">
+          {author.name}
+        </Heading>
       </Flex>
     </Flex>
   );

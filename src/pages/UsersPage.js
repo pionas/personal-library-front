@@ -1,11 +1,13 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
+import { SimpleGrid, Box } from "@chakra-ui/core";
+import Link from "../components/Link";
 import User from "../components/User";
-import { SimpleGrid } from "@chakra-ui/core";
 
 const ALL_USERS_QUERY = gql`
   query AllUsers {
     users {
+      id
       name
       avatar {
         image {
@@ -27,10 +29,14 @@ export default function UsersPage() {
   }
   const { users } = data;
   return (
-    <SimpleGrid columns={[1, 2, 4]}>
-      {users.map(user => (
-        <User key={user.name} user={user} />
-      ))}
-    </SimpleGrid>
+    <Box w="100%">
+      <SimpleGrid columns={[1, 2, 4]}>
+        {users.map(user => (
+          <Link key={user.id} to={`/users/${user.id}`}>
+            <User user={user} />
+          </Link>
+        ))}
+      </SimpleGrid>
+    </Box>
   );
 }
