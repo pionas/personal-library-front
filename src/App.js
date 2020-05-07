@@ -56,7 +56,7 @@ export default function App() {
         <Route path="users/" element={<UsersPage />} />
         <Route path="users/:userId" element={<UserDetailsPage />} />
         <Route path="random/" element={<RandomPage />} />
-        <Route path="authors/:name" element={<AuthorDetailsPage />} />
+        <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
         <Route path="admin/anything/:anyId" element={<AnythingDetailsPage />} />
         <Route path="admin/everything" element={<EverythingPage />} />
       </Routes>

@@ -15,7 +15,7 @@ const GET_AUTHOR_QUERY = gql`
   ${AUTHOR_DETAILS_FIELDS_FRAGMENT}
 `;
 
-export default function UserDetailsPage() {
+export default function AuthorDetailsPage() {
   const { authorId } = useParams();
   const { loading, error, data } = useQuery(GET_AUTHOR_QUERY, {
     variables: { authorId }
@@ -24,7 +24,7 @@ export default function UserDetailsPage() {
     return <p>Loading...</p>;
   }
   if (error) {
-    return <p>Could not load book "{authorId}"</p>;
+    return <p>Could not load author "{authorId}"</p>;
   }
   const { author } = data;
   return (
