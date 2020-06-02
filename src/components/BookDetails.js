@@ -17,6 +17,7 @@ export const BOOK_DETAILS_FIELDS_FRAGMENT = gql`
     }
   }
 `;
+
 export default function BookDetails({ book }) {
   return (
     <Flex m="3" direction="column" align="center">

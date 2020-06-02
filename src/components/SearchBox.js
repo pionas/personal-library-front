@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { Input, FormLabel, IconButton, Stack } from "@chakra-ui/core";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { Input, FormLabel, IconButton, Stack } from "@chakra-ui/core";
 
 export function useSearchQuery(baseSearchPath) {
+  const { encodedSearchQuery = "" } = useParams();
+  const searchQuery = decodeURIComponent(encodedSearchQuery);
   const navigate = useNavigate();
-  const { searchQuery = "" } = useParams();
-  const handleSearchQueryChange = newSearchQuery => navigate(`${baseSearchPath}${encodeURIComponent(newSearchQuery)}`)
-  const searchQueryDecode = decodeURIComponent(searchQuery);
-  return [searchQueryDecode, handleSearchQueryChange];
+  const handleSearchQueryChange = newSearchQuery =>
+    navigate(`${baseSearchPath}${encodeURIComponent(newSearchQuery)}`);
+  return [searchQuery, handleSearchQueryChange];
 }
 
 export default function SearchBox({ searchQuery, onSearchQueryChange }) {
@@ -37,8 +38,8 @@ export default function SearchBox({ searchQuery, onSearchQueryChange }) {
             onChange={e => setSearchQueryDraft(e.target.value)}
           />
         ) : (
-            <FormLabel>{message}</FormLabel>
-          )}
+          <FormLabel>{message}</FormLabel>
+        )}
         {showSearchButton && (
           <IconButton
             onClick={() => {

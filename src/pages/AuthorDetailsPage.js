@@ -1,6 +1,6 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Flex } from "@chakra-ui/core";
+import { Box } from "@chakra-ui/core";
 import { useParams } from "react-router";
 import AuthorDetails, {
   AUTHOR_DETAILS_FIELDS_FRAGMENT
@@ -24,12 +24,12 @@ export default function AuthorDetailsPage() {
     return <p>Loading...</p>;
   }
   if (error) {
-    return <p>Could not load author "{authorId}"</p>;
+    return <p>Could not load books</p>;
   }
   const { author } = data;
   return (
-    <Flex wrap="wrap" justify="space-around">
-      <AuthorDetails key={author.name} author={author} />
-    </Flex>
+    <Box>
+      <AuthorDetails author={author} />
+    </Box>
   );
 }

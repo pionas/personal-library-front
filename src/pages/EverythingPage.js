@@ -1,16 +1,19 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Box, Heading } from "@chakra-ui/core";
-import NormalizedAnything, { NORMALIZED_ANYTHING_FILEDS_FRAGMENT, normalizedAnything } from "../components/NormalizedAnything";
+import NormalizedAnything, {
+  normalizeAnything,
+  NORMALIZED_ANYTHING_FRAGMENT
+} from "../components/NormalizedAnything";
+import Link from "../components/Link";
 
 const GET_EVERYTHING_QUERY = gql`
   query GetEverything {
     everything {
-      __typename
-      ...anythingDetailsFields
+      ...normalizedAnything
     }
   }
-  ${NORMALIZED_ANYTHING_FILEDS_FRAGMENT}
+  ${NORMALIZED_ANYTHING_FRAGMENT}
 `;
 
 export default function EverythingPage() {
@@ -19,18 +22,23 @@ export default function EverythingPage() {
     return <p>Loading...</p>;
   }
   if (error) {
-    return <p>Could not load everything</p>;
+    return <p>Could not load record</p>;
   }
 
   const { everything } = data;
-  const normalizedEverything = everything.map(normalizedAnything);
+  const normalizedEverything = everything.map(normalizeAnything);
   return (
     <Box w="100%" bg="red.100" p={5}>
       <Heading textAlign="center" color="red.500">
         Warning! Admin area!
       </Heading>
-      {normalizedEverything.map(anything => (
-        <NormalizedAnything normalizedAnything={anything} />
+      {normalizedEverything.map(normalizedAnything => (
+        <Link
+          to={`/admin/anything/${normalizedAnything.id}`}
+          key={normalizedAnything.id}
+        >
+          <NormalizedAnything normalizedAnything={normalizedAnything} />
+        </Link>
       ))}
     </Box>
   );

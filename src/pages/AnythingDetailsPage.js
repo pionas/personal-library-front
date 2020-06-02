@@ -9,7 +9,7 @@ import AnythingDetails, {
 const GET_ANYTHING_QUERY = gql`
   query GetAnything($anyId: ID!) {
     anything(id: $anyId) {
-     ...anythingDetailsFields
+      ...anythingDetailsFields
     }
   }
   ${ANYTHING_DETAILS_FIELDS_FRAGMENT}
@@ -30,7 +30,7 @@ export default function AnythingDetailsPage() {
   const { anything } = data;
 
   return (
-    <Box w="100%" bg="red.100">
+    <Box bg="red.100">
       <Heading textAlign="center" color="red.500">
         Warning! Admin area!
       </Heading>

@@ -15,12 +15,13 @@ const GET_BOOKS_QUERY = gql`
 `;
 
 export default function BooksPage() {
-  const [searchQueryDecode, handleSearchQueryChange] = useSearchQuery("/books/search/");
+  const [searchQuery, handleSearchQueryChange] = useSearchQuery(
+    "/books/search/"
+  );
 
   const { loading, error, data } = useQuery(GET_BOOKS_QUERY, {
-    variables: { searchQuery: searchQueryDecode }
+    variables: { searchQuery }
   });
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -28,15 +29,23 @@ export default function BooksPage() {
     return <p>Could not load books</p>;
   }
   const { books } = data;
+  console.log(books, GET_BOOKS_QUERY);
   const hasBooks = books.length > 0;
   return (
     <Box w="100%">
-      <SearchBox searchQuery={searchQueryDecode} onSearchQueryChange={handleSearchQueryChange} />
-      {hasBooks ? books.map(book => (
-        <Link key={book.id} to={`/books/${book.id}`}>
-          <Book {...book} />
-        </Link>
-      )) : <p>No books found</p>}
+      <SearchBox
+        searchQuery={searchQuery}
+        onSearchQueryChange={handleSearchQueryChange}
+      />
+      {hasBooks ? (
+        books.map(book => (
+          <Link key={book.id} to={`/books/${book.id}`}>
+            <Book {...book} />
+          </Link>
+        ))
+      ) : (
+        <p>No books found</p>
+      )}
     </Box>
   );
 }

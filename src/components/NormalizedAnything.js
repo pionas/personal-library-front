@@ -1,46 +1,62 @@
 import React from "react";
-import { Stack, Image, Heading, Box } from "@chakra-ui/core";
 import { gql } from "@apollo/client";
+import { Stack, Image, Heading, Box } from "@chakra-ui/core";
 
-export const normalizedAnything = anything => ({
+export const normalizeAnything = anything => ({
   ...anything.nested,
   ...anything
 });
-export const NORMALIZED_ANYTHING_FILEDS_FRAGMENT = gql`
-fragment anythingDetailsFields on Anything {
-  ... on Author {
-    name
-    info: bio
-    img: photo {
-      url
-    }
-  }
-  ... on User {
-    name
-    info
-    nested: avatar {
-      img: image {
+
+export const NORMALIZED_ANYTHING_FRAGMENT = gql`
+  fragment normalizedAnything on Anything {
+    ... on Author {
+      id
+      name
+      info: bio
+      img: photo {
         url
       }
     }
-  }
-  ... on Book {
-    name: title
-    info: description
-    img: cover {
-      url
+    ... on Book {
+      id
+      name: title
+      info: description
+      img: cover {
+        url
+      }
+    }
+    ... on BookCopy {
+      id
+      nested: book {
+        name: title
+        info: description
+        img: cover {
+          url
+        }
+      }
+    }
+    ... on User {
+      id
+      name
+      info
+      nested: avatar {
+        img: image {
+          url
+        }
+      }
     }
   }
-}
 `;
 
 const COLORS_BY_TYPENAME = {
+  BookCopy: "purple.200",
   Book: "red.200",
   Author: "green.200",
   User: "blue.200"
 };
 
 function NormalizedAnything({ normalizedAnything }) {
+  console.log(normalizedAnything);
   return (
     <Stack
       w="100%"
@@ -55,7 +71,7 @@ function NormalizedAnything({ normalizedAnything }) {
           size="100px"
           rounded={5}
           objectFit="cover"
-          src={normalizedAnything.img && normalizedAnything.img.url}
+          src={normalizedAnything.img.url}
         />
         <Stack>
           <Heading as="h4" size="sm">
