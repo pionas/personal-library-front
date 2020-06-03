@@ -15,13 +15,6 @@ export const USER_DETAILS_FIELDS_FRAGMENT = gql`
   ${AVATAR_FIELDS_FRAGMENT}
 `;
 
-export function addBookCopytoBorrowed(cache, bookCopy) {
-  console.log(cache, bookCopy);
-}
-export function removeBookCopyFromBorrowed(cache, bookCopy, ownerId) {
-  console.log(ownerId, cache, bookCopy);
-}
-
 export default function User({ user }) {
   return (
     <Box>

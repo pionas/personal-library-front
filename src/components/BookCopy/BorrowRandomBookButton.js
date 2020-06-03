@@ -49,19 +49,20 @@ export default function BorrowRandomBookButton() {
           isClosable: true
         });
       },
-      refetchQueries: ({ data }) => {
-        if (data.borrowRandomBook == null || data.borrowRandomBook.borrower == null) {
-          return [];
-        }
-        return [
-          {
-            query: GET_USER_QUERY,
-            variables: { userId: data.borrowRandomBook.borrower.id }
-          }
-        ];
+      update: (cache, { data: { borrowRandomBook } }) => {
+        const cachedData = cache.readQuery({
+          query: GET_USER_QUERY,
+          variables: { userId: borrowRandomBook.borrower.id }
+        });
+        const data = JSON.parse(JSON.stringify(cachedData));
+        data.user.borrowedBookCopies.push(borrowRandomBook);
+        cache.writeQuery({
+          query: GET_USER_QUERY,
+          variables: { userId: borrowRandomBook.borrower.id },
+          data
+        });
       }
-    }
-  );
+    });
 
   return (
     <Button disabled={loading} onClick={borrowRandomBook}>
