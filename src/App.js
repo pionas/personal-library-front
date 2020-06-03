@@ -9,8 +9,8 @@ import AuthorDetailsPage from "./pages/AuthorDetailsPage";
 import UsersPage from "./pages/UsersPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
 import RandomPage from "./pages/RandomPage";
-import AnythingDetailsPage from "./pages/AnythingDetailsPage";
-import EverythingPage from "./pages/EverythingPage";
+import ResourceDetailsPage from "./pages/ResourceDetailsPage";
+import ResourcesPage from "./pages/ResourcesPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 
 export default function App() {
@@ -63,8 +63,8 @@ export default function App() {
         <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
         <Route path="authors/search/:searchQuery" element={<AuthorsPage />} />
         <Route path="authors/search/" element={<AuthorsPage />} />
-        <Route path="admin/anything/:anyId" element={<AnythingDetailsPage />} />
-        <Route path="admin/everything" element={<EverythingPage />} />
+        <Route path="admin/resource/:anyId" element={<ResourceDetailsPage />} />
+        <Route path="admin/resources" element={<ResourcesPage />} />
       </Routes>
     </Flex>
   );

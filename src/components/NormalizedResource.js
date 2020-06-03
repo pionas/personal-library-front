@@ -2,13 +2,13 @@ import React from "react";
 import { gql } from "@apollo/client";
 import { Stack, Image, Heading, Box } from "@chakra-ui/core";
 
-export const normalizeAnything = anything => ({
-  ...anything.nested,
-  ...anything
+export const normalizeResource = resource => ({
+  ...resource.nested,
+  ...resource
 });
 
-export const NORMALIZED_ANYTHING_FRAGMENT = gql`
-  fragment normalizedAnything on Anything {
+export const NORMALIZED_RESOURCE_FRAGMENT = gql`
+  fragment normalizedResourceFields on Resource {
     ... on Author {
       id
       name
@@ -55,13 +55,13 @@ const COLORS_BY_TYPENAME = {
   User: "blue.200"
 };
 
-function NormalizedAnything({ normalizedAnything }) {
-  console.log(normalizedAnything);
+function NormalizedResource({ normalizedResource }) {
+  console.log(normalizedResource);
   return (
     <Stack
       w="100%"
       my={3}
-      bg={COLORS_BY_TYPENAME[normalizedAnything.__typename]}
+      bg={COLORS_BY_TYPENAME[normalizedResource.__typename]}
       p={3}
       overflow="hidden"
       rounded={5}
@@ -71,14 +71,14 @@ function NormalizedAnything({ normalizedAnything }) {
           size="100px"
           rounded={5}
           objectFit="cover"
-          src={normalizedAnything.img.url}
+          src={normalizedResource.img.url}
         />
         <Stack>
           <Heading as="h4" size="sm">
-            {normalizedAnything.__typename}
+            {normalizedResource.__typename}
           </Heading>
           <Heading as="h3" size="md">
-            {normalizedAnything.name}
+            {normalizedResource.name}
           </Heading>
           <Box
             as="article"
@@ -87,7 +87,7 @@ function NormalizedAnything({ normalizedAnything }) {
             overflow="hidden"
             textOverflow="ellipsis"
           >
-            {normalizedAnything.info}
+            {normalizedResource.info}
           </Box>
         </Stack>
       </Stack>
@@ -95,4 +95,4 @@ function NormalizedAnything({ normalizedAnything }) {
   );
 }
 
-export default NormalizedAnything;
+export default NormalizedResource;

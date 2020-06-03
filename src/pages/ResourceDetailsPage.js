@@ -2,22 +2,22 @@ import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Box, Heading } from "@chakra-ui/core";
 import { useParams } from "react-router";
-import AnythingDetails, {
-  ANYTHING_DETAILS_FIELDS_FRAGMENT
-} from "../components/AnythingDetails";
+import ResourceDetails, {
+  RESOURCE_DETAILS_FIELDS_FRAGMENT
+} from "../components/ResourceDetails";
 
-const GET_ANYTHING_QUERY = gql`
-  query GetAnything($anyId: ID!) {
-    anything(id: $anyId) {
-      ...anythingDetailsFields
+const GET_RESOURCE_QUERY = gql`
+  query GetResource($anyId: ID!) {
+    resource(id: $anyId) {
+      ...resourceDetailsFields
     }
   }
-  ${ANYTHING_DETAILS_FIELDS_FRAGMENT}
+  ${RESOURCE_DETAILS_FIELDS_FRAGMENT}
 `;
 
-export default function AnythingDetailsPage() {
+export default function ResourceDetailsPage() {
   const { anyId } = useParams();
-  const { loading, error, data } = useQuery(GET_ANYTHING_QUERY, {
+  const { loading, error, data } = useQuery(GET_RESOURCE_QUERY, {
     variables: { anyId }
   });
   if (loading) {
@@ -27,14 +27,14 @@ export default function AnythingDetailsPage() {
     return <p>Could not load record</p>;
   }
 
-  const { anything } = data;
+  const { resource } = data;
 
   return (
     <Box bg="red.100">
       <Heading textAlign="center" color="red.500">
         Warning! Admin area!
       </Heading>
-      <AnythingDetails anything={anything} />
+      <ResourceDetails resource={resource} />
     </Box>
   );
 }
