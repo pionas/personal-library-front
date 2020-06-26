@@ -6,7 +6,7 @@ import AuthorDetails, {
   AUTHOR_DETAILS_FIELDS_FRAGMENT
 } from "../components/AuthorDetails";
 
-const GET_AUTHOR_QUERY = gql`
+export const GET_AUTHOR_QUERY = gql`
   query GetAuthor($authorId: ID!) {
     author(id: $authorId) {
       ...authorDetailsFields

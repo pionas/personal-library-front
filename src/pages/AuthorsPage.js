@@ -1,26 +1,31 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import Author, { AUTHORS_FIELDS_FRAGMENT } from "../components/Author";
-import { Flex, Box } from "@chakra-ui/core";
+import Author, { AUTHOR_FIELDS_FRAGMENT } from "../components/Author";
+import { SimpleGrid, Stack } from "@chakra-ui/core";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
+import AdminActions from "../components/AdminActions";
+import ResetDataButton from "../components/ResetDataButton";
+import AuthorDeleteButton from "../components/AuthorDeleteButton";
+import ButtonLink from "../components/ButtonLink";
 
-const GET_AUTHORS_QUERY = gql`
-  query GetAuthors($searchQuery: String!) {
+export const ALL_AUTHORS_QUERY = gql`
+  query AllAuthors($searchQuery: String!) {
     authors(searchQuery: $searchQuery) {
       ...authorFields
     }
   }
-  ${AUTHORS_FIELDS_FRAGMENT}
+  ${AUTHOR_FIELDS_FRAGMENT}
 `;
 
-export default function UsersPage() {
+export default function AuthorsPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/authors/search/"
   );
-  const { loading, error, data } = useQuery(GET_AUTHORS_QUERY, {
+  const { loading, error, data } = useQuery(ALL_AUTHORS_QUERY, {
     variables: { searchQuery }
   });
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -29,18 +34,29 @@ export default function UsersPage() {
   }
   const { authors } = data;
   return (
-    <Box>
+    <Stack w="100%">
       <SearchBox
         searchQuery={searchQuery}
         onSearchQueryChange={handleSearchQueryChange}
       />
-      <Flex wrap="wrap" justify="space-around">
+
+      <SimpleGrid columns={[1, 2, 3, 4]}>
         {authors.map(author => (
-          <Link key={author.id} to={`/authors/${author.id}`}>
-            <Author author={author} />
-          </Link>
+          <Stack key={author.id}>
+            <Link to={`/authors/${author.id}`}>
+              <Author author={author} />
+            </Link>
+            <AdminActions direction="column">
+              <ButtonLink to={`/authors/${author.id}/edit`}>Edit author</ButtonLink>
+              <AuthorDeleteButton authorId={author.id} />
+            </AdminActions>
+          </Stack>
         ))}
-      </Flex>
-    </Box>
+      </SimpleGrid>
+      <AdminActions>
+        <ButtonLink to={"/authors/new"}>Create new Author</ButtonLink>
+        <ResetDataButton />
+      </AdminActions>
+    </Stack>
   );
 }

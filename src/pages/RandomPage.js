@@ -6,7 +6,7 @@ import Author from "../components/Author";
 import Link from "../components/Link";
 import { BOOK_FIELDS_FRAGMENT } from "../components/Book";
 import { USER_FIELDS_FRAGMENT } from "../components/User";
-import { AUTHORS_FIELDS_FRAGMENT } from "../components/Author";
+import { AUTHOR_FIELDS_FRAGMENT } from "../components/Author";
 
 const RANDOM_QUERY = gql`
   query Randoms {
@@ -22,7 +22,7 @@ const RANDOM_QUERY = gql`
   }
   ${BOOK_FIELDS_FRAGMENT}
   ${USER_FIELDS_FRAGMENT}
-  ${AUTHORS_FIELDS_FRAGMENT}
+  ${AUTHOR_FIELDS_FRAGMENT}
 `;
 
 export default function RandomPage() {

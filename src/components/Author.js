@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Heading, Image } from "@chakra-ui/core";
 import { gql } from "@apollo/client";
 
-export const AUTHORS_FIELDS_FRAGMENT = gql`
+export const AUTHOR_FIELDS_FRAGMENT = gql`
   fragment authorFields on Author {
     id
     name
