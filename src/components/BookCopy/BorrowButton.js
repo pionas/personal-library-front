@@ -43,10 +43,7 @@ export default function BorrowButton({ availableBookCopy }) {
           variables: { userId: borrowBookCopy.borrower.id },
           data
         });
-        console.info("Updated cached user data");
-      } catch (error) {
-        console.info("Did not update cached user data: ", error);
-      }
+      } catch (error) { }
     }
   });
 
