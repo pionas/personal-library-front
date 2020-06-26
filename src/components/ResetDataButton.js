@@ -1,17 +1,32 @@
 import React from "react";
+import { gql, useMutation } from "@apollo/client";
 import { Button } from "@chakra-ui/core";
 import { useToast } from "./Toast";
 
+const RESET_DATA_MUTATION = gql`
+  mutation ResetData {
+    resetData {
+      success
+      message
+    }
+  }
+`;
+
 export default function ResetDataButton(props) {
     const toast = useToast();
-    return (
-        <Button
-            onClick={() =>
-                toast({ status: "warning", description: "NOT IMPLEMENTED" })
+    const [resetData, { loading, client }] = useMutation(RESET_DATA_MUTATION, {
+        onCompleted: ({ resetData: { success, message } }) => {
+            toast({
+                description: message,
+                status: success ? "success" : "error"
+            });
+            if (success) {
+                client.resetStore();
             }
-            isLoading={false}
-            {...props}
-        >
+        }
+    });
+    return (
+        <Button onClick={() => resetData()} isLoading={loading} {...props}>
             Reset Data
         </Button>
     );

@@ -1,8 +1,9 @@
-import { Button, useToast } from "@chakra-ui/core";
+import { Button } from "@chakra-ui/core";
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { GET_USER_QUERY } from "../../pages/UserDetailsPage";
 import { BOOK_COPY_FIELDS_FRAGMENT } from "./fragments";
+import { useToast } from "../Toast";
 
 const BORROW_BOOK_COPY_MUTATION = gql`
   mutation BorrowBookCopy($bookCopyId: ID!) {
@@ -19,36 +20,33 @@ export default function BorrowButton({ availableBookCopy }) {
     variables: { bookCopyId: availableBookCopy.id },
     onCompleted: () => {
       toast({
-        title: "Success",
         description: "You've borrowed the book",
-        status: "success",
-        duration: 1000,
-        position: "top",
-        isClosable: true
+        status: "success"
       });
     },
     onError: error => {
       toast({
-        title: "Could not borrow the book",
         description: error.message,
-        status: "error",
-        duration: 1000,
-        position: "top",
-        isClosable: true
+        status: "error"
       });
     },
     update: (cache, { data: { borrowBookCopy } }) => {
-      const cachedData = cache.readQuery({
-        query: GET_USER_QUERY,
-        variables: { userId: borrowBookCopy.borrower.id }
-      });
-      const data = JSON.parse(JSON.stringify(cachedData));
-      data.user.borrowedBookCopies.push(borrowBookCopy);
-      cache.writeQuery({
-        query: GET_USER_QUERY,
-        variables: { userId: borrowBookCopy.borrower.id },
-        data
-      });
+      try {
+        const cachedData = cache.readQuery({
+          query: GET_USER_QUERY,
+          variables: { userId: borrowBookCopy.borrower.id }
+        });
+        const data = JSON.parse(JSON.stringify(cachedData));
+        data.user.borrowedBookCopies.push(borrowBookCopy);
+        cache.writeQuery({
+          query: GET_USER_QUERY,
+          variables: { userId: borrowBookCopy.borrower.id },
+          data
+        });
+        console.info("Updated cached user data");
+      } catch (error) {
+        console.info("Did not update cached user data: ", error);
+      }
     }
   });
 

@@ -8,6 +8,10 @@ import UserDetails, {
 import BookCopy from "../components/BookCopy";
 import { BOOK_COPY_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 import BorrowRandomBookButton from "../components/BookCopy/BorrowRandomBookButton";
+import AdminActions from "../components/AdminActions";
+import ResetDataButton from "../components/ResetDataButton";
+import ButtonLink from "../components/ButtonLink";
+import UserDeleteButton from "../components/UserDeleteButton";
 
 export const GET_USER_QUERY = gql`
   query GetUser($userId: ID!) {
@@ -37,9 +41,17 @@ export default function UserDetailsPage() {
     return <p>Could not load user...</p>;
   }
   const { user } = data;
+  if (!user) {
+    return <p>User not found</p>;
+  }
   return (
     <Stack>
       <UserDetails user={user} />
+      <AdminActions>
+        <ButtonLink to={`/users/${userId}/edit`}>Edit user</ButtonLink>
+        <UserDeleteButton userId={user.id} />
+        <ResetDataButton />
+      </AdminActions>
       <BorrowRandomBookButton />
       <Heading as="h3" size="lg" textAlign="center">
         Owned books
