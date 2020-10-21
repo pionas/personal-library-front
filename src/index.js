@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { CSSReset, ThemeProvider, theme } from "@chakra-ui/core";
 
 import App from "./App";
+import AuthProvider from "./components/AuthProvider";
 
 const GRAPHQL_ENDPOINT = "https://ancient-badlands-11449.herokuapp.com/";
 
@@ -28,7 +29,9 @@ ReactDOM.render(
     <Router>
       <ThemeProvider theme={theme}>
         <CSSReset />
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ThemeProvider>
     </Router>
   </ApolloProvider>,

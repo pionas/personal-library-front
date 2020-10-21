@@ -56,7 +56,6 @@ const COLORS_BY_TYPENAME = {
 };
 
 function NormalizedResource({ normalizedResource }) {
-  console.log(normalizedResource);
   return (
     <Stack
       w="100%"

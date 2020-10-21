@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Flex, Box, Divider, Heading } from "@chakra-ui/core";
-import Link from "./components/Link";
+import { Flex } from "@chakra-ui/core";
 import BooksPage from "./pages/BooksPage";
 import AuthorsPage from "./pages/AuthorsPage";
 import AuthorDetailsPage from "./pages/AuthorDetailsPage";
@@ -16,6 +15,8 @@ import RandomPage from "./pages/RandomPage";
 import ResourceDetailsPage from "./pages/ResourceDetailsPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
+import Header from "./components/Header";
+import CurrentUserDetailsPage from "./pages/CurrentUserDetailsPage";
 
 export default function App() {
   return (
@@ -25,34 +26,7 @@ export default function App() {
       width={["100%", "75%", "60%"]}
       mx="auto"
     >
-      <Flex
-        direction={["column", null, "row"]}
-        align="center"
-        justifyContent="space-between"
-        w="100%"
-        mx="5"
-      >
-        <Link to="/">
-          <Heading as="h1">Personal Library</Heading>
-        </Link>
-        <Box d="flex">
-          <Link to="/">
-            <h1>Books</h1>
-          </Link>
-          <Divider orientation="vertical" />
-          <Link to="/authors">
-            <h1>Authors</h1>
-          </Link>
-          <Divider orientation="vertical" />
-          <Link to="/users">
-            <h1>Users</h1>
-          </Link>
-          <Divider orientation="vertical" />
-          <Link to="/random">
-            <h1>Random</h1>
-          </Link>
-        </Box>
-      </Flex>
+      <Header />
       <Routes>
         <Route path="/" element={<BooksPage />} />
         <Route path="books/:bookId" element={<BookDetailsPage />} />
@@ -64,6 +38,7 @@ export default function App() {
         <Route path="users/new" element={<NewUserPage />} />
         <Route path="users/search/:searchQuery" element={<UsersPage />} />
         <Route path="users/search/" element={<UsersPage />} />
+        <Route path="me/" element={<CurrentUserDetailsPage />} />
         <Route path="random/" element={<RandomPage />} />
         <Route path="authors/" element={<AuthorsPage />} />
         <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
