@@ -17,6 +17,8 @@ import ResourcesPage from "./pages/ResourcesPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 import Header from "./components/Header";
 import CurrentUserDetailsPage from "./pages/CurrentUserDetailsPage";
+import SignUpPage from "./pages/SignUpPage";
+import LogInPage from "./pages/LogInPage";
 
 export default function App() {
   return (
@@ -39,6 +41,8 @@ export default function App() {
         <Route path="users/search/:searchQuery" element={<UsersPage />} />
         <Route path="users/search/" element={<UsersPage />} />
         <Route path="me/" element={<CurrentUserDetailsPage />} />
+        <Route path="signup/" element={<SignUpPage />} />
+        <Route path="login/" element={<LogInPage />} />
         <Route path="random/" element={<RandomPage />} />
         <Route path="authors/" element={<AuthorsPage />} />
         <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
