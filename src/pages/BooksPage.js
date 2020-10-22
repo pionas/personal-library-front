@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Box } from "@chakra-ui/core";
+import { Box, Stack, Text } from "@chakra-ui/core";
 import Book, { BOOK_FIELDS_FRAGMENT } from "../components/Book";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
 import SimplePagination from "../components/SimplePagination";
+import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 const GET_BOOKS_QUERY = gql`
   query GetBooks($searchQuery: String!, $pageNumber: Int = 1) {
-    books(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
-      ...bookFields
+    paginatedBooks(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
+      results {
+        ...bookFields
+      }
+      pageInfo {
+        ...pageInfo
+      }
     }
   }
   ${BOOK_FIELDS_FRAGMENT}
+  ${PAGE_INFO_FIELDS_FRAGMENT}
 `;
 
 export default function BooksPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/books/search/"
   );
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [tryLoading, setTryLoading] = useState(false);
 
   const { loading, error, data, fetchMore } = useQuery(GET_BOOKS_QUERY, {
@@ -31,7 +37,8 @@ export default function BooksPage() {
   if (error) {
     return <p>Could not load books</p>;
   }
-  const { books } = data;
+  const { paginatedBooks } = data;
+  const { results: books, pageInfo } = paginatedBooks;
   const hasBooks = books.length > 0;
   return (
     <Box w="100%">
@@ -39,7 +46,10 @@ export default function BooksPage() {
         searchQuery={searchQuery}
         onSearchQueryChange={handleSearchQueryChange}
       />
-      {tryLoading ? (<p>Loading...</p>) : null}
+      {tryLoading ? (
+        <Stack m="0" p="3" bg="red.200" direction="row">
+          <Text>Loading...</Text>
+        </Stack>) : null}
       {hasBooks ? (
         <>
           {books.map(book => (
@@ -48,7 +58,7 @@ export default function BooksPage() {
             </Link>
           ))}
           <SimplePagination
-            pageNumber={currentPageNumber}
+            pageInfo={pageInfo}
             onPageChange={(pageNumber) => {
               setTryLoading(true);
               fetchMore({
@@ -61,7 +71,6 @@ export default function BooksPage() {
                   return fetchMoreResult;
                 }
               });
-              setCurrentPageNumber(pageNumber);
             }}
           />
         </>

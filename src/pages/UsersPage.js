@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import User, { USER_FIELDS_FRAGMENT } from "../components/User";
 import { SimpleGrid, Stack } from "@chakra-ui/core";
@@ -9,21 +9,27 @@ import ResetDataButton from "../components/ResetDataButton";
 import UserDeleteButton from "../components/UserDeleteButton";
 import ButtonLink from "../components/ButtonLink";
 import SimplePagination from "../components/SimplePagination";
+import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_USERS_QUERY = gql`
   query AllUsers($searchQuery: String!, $pageNumber: Int = 1) {
-    users(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
-      ...userFields
+    paginatedUsers(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
+      results {
+        ...userFields
+      }
+      pageInfo {
+        ...pageInfo
+      }      
     }
   }
   ${USER_FIELDS_FRAGMENT}
+  ${PAGE_INFO_FIELDS_FRAGMENT}
 `;
 
 export default function UsersPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/users/search/"
   );
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const { loading, error, data, fetchMore } = useQuery(ALL_USERS_QUERY, {
     variables: { searchQuery }
   });
@@ -34,7 +40,8 @@ export default function UsersPage() {
   if (error) {
     return <p>Could not load users...</p>;
   }
-  const { users } = data;
+  const { paginatedUsers } = data;
+  const { results: users, pageInfo } = paginatedUsers;
   const hasUsers = users.length > 0;
   return (
     <Stack w="100%">
@@ -58,7 +65,7 @@ export default function UsersPage() {
             ))}
           </SimpleGrid>
           <SimplePagination
-            pageNumber={currentPageNumber}
+            pageInfo={pageInfo}
             onPageChange={(pageNumber) => {
               fetchMore({
                 variables: { pageNumber },
@@ -69,7 +76,6 @@ export default function UsersPage() {
                   return fetchMoreResult;
                 }
               });
-              setCurrentPageNumber(pageNumber);
             }}
           />
         </>

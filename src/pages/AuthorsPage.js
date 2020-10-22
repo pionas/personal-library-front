@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import Author, { AUTHOR_FIELDS_FRAGMENT } from "../components/Author";
 import { SimpleGrid, Stack } from "@chakra-ui/core";
@@ -9,21 +9,27 @@ import ResetDataButton from "../components/ResetDataButton";
 import AuthorDeleteButton from "../components/AuthorDeleteButton";
 import ButtonLink from "../components/ButtonLink";
 import SimplePagination from "../components/SimplePagination";
+import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_AUTHORS_QUERY = gql`
   query AllAuthors($searchQuery: String!, $pageNumber: Int = 1) {
-    authors(searchQuery: $searchQuery, pageSize: 6, pageNumber: $pageNumber) {
-      ...authorFields
+    paginatedAuthors(searchQuery: $searchQuery, pageSize: 6, pageNumber: $pageNumber) {
+      results {
+        ...authorFields
+      }
+      pageInfo {
+        ...pageInfo
+      }
     }
   }
   ${AUTHOR_FIELDS_FRAGMENT}
+  ${PAGE_INFO_FIELDS_FRAGMENT}
 `;
 
 export default function AuthorsPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/authors/search/"
   );
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
   const { loading, error, data, fetchMore } = useQuery(ALL_AUTHORS_QUERY, {
     variables: { searchQuery }
@@ -35,7 +41,8 @@ export default function AuthorsPage() {
   if (error) {
     return <p>Could not load authors...</p>;
   }
-  const { authors } = data;
+  const { paginatedAuthors } = data;
+  const { results: authors, pageInfo } = paginatedAuthors;
   const hasAuthors = authors.length > 0;
   return (
     <Stack w="100%">
@@ -59,7 +66,7 @@ export default function AuthorsPage() {
             ))}
           </SimpleGrid>
           <SimplePagination
-            pageNumber={currentPageNumber}
+            pageInfo={pageInfo}
             onPageChange={(pageNumber) => {
               fetchMore({
                 variables: { pageNumber },
@@ -70,7 +77,6 @@ export default function AuthorsPage() {
                   return fetchMoreResult;
                 }
               });
-              setCurrentPageNumber(pageNumber);
             }}
           />
         </>

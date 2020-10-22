@@ -26,3 +26,14 @@ export const BOOK_COPY_FIELDS_FRAGMENT = gql`
   }
   ${AVATAR_FIELDS_FRAGMENT}
 `;
+
+export const PAGE_INFO_FIELDS_FRAGMENT = gql`
+  fragment pageInfo on PageInfo {
+    currentPageNumber
+    nextPageNumber
+    previousPageNumber
+    currentOffset
+    nextPageOffset
+    previousPageOffset
+  }
+`;
