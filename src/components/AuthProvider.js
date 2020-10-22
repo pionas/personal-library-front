@@ -27,13 +27,14 @@ export function useAuth() {
 }
 
 function AuthProvider({ children }) {
-    const { loading, error, data, client } = useQuery(GET_CURRENT_USER_QUERY);
+    const { loading, error, data, client, refetch } = useQuery(GET_CURRENT_USER_QUERY);
     const toast = useToast();
     const navigate = useNavigate();
 
     function authorize(token) {
         saveAuthToken(token);
         navigate("/");
+        refetch();
     }
 
     function unauthorize() {
