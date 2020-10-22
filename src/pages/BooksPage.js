@@ -8,8 +8,8 @@ import SimplePagination from "../components/SimplePagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 const GET_BOOKS_QUERY = gql`
-  query GetBooks($searchQuery: String!, $pageNumber: Int = 1) {
-    paginatedBooks(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
+  query GetBooks($searchQuery: String!, $pageNumber: Int = 0) {
+    paginatedBooks(searchQuery: $searchQuery, limit: 3, offset: $pageNumber) {
       results {
         ...bookFields
       }
@@ -59,6 +59,7 @@ export default function BooksPage() {
           ))}
           <SimplePagination
             pageInfo={pageInfo}
+            resourcesLength={books.length}
             onPageChange={(pageNumber) => {
               setTryLoading(true);
               fetchMore({
