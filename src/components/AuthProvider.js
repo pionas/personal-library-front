@@ -1,8 +1,15 @@
 import React from "react";
+import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router";
+import { GET_CURRENT_USER_QUERY } from '../pages/CurrentUserDetailsPage';
+import { useToast } from "./Toast";
 
 function saveAuthToken(token) {
     localStorage.setItem("token", token);
+}
+
+export function cleanAuthToken() {
+    localStorage.removeItem("token");
 }
 
 export function getAuthToken() {
@@ -20,6 +27,8 @@ export function useAuth() {
 }
 
 function AuthProvider({ children }) {
+    const { loading, error, data, client } = useQuery(GET_CURRENT_USER_QUERY);
+    const toast = useToast();
     const navigate = useNavigate();
 
     function authorize(token) {
@@ -27,10 +36,25 @@ function AuthProvider({ children }) {
         navigate("/");
     }
 
+    function unauthorize() {
+        cleanAuthToken();
+        client.resetStore();
+        navigate("/");
+        toast({
+            description: "You've successfully logged out.",
+            status: "success"
+        });
+    }
+
     const authValue = {
         ...DEFAULT_VALUE,
-        authorize
+        authorize,
+        unauthorize
     };
+
+    if (!loading && !error) {
+        authValue.currentUser = data.currentUser;
+    }
 
     return (
         <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>

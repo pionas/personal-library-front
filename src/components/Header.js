@@ -6,7 +6,7 @@ import UserMenu from "./Header/UserMenu";
 import { useAuth } from "./AuthProvider";
 
 function Header(props) {
-    const { currentUser } = useAuth();
+    const { currentUser, unauthorize } = useAuth();
     return (
         <Flex
             direction={["column", null, "row"]}
@@ -42,7 +42,7 @@ function Header(props) {
                 ) : (
                         <UserMenu
                             currentUser={currentUser}
-                            onLogOut={() => console.log("Trying to log out")}
+                            onLogOut={unauthorize}
                         />
                     )}
             </Box>
