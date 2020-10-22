@@ -8,7 +8,7 @@ import { CSSReset, ThemeProvider, theme } from "@chakra-ui/core";
 import App from "./App";
 import AuthProvider, { getAuthToken } from "./components/AuthProvider";
 
-const GRAPHQL_ENDPOINT = "http://localhost:4000/";
+const GRAPHQL_ENDPOINT = "https://ancient-badlands-11449.herokuapp.com/";
 const token = getAuthToken();
 
 const cache = new InMemoryCache({

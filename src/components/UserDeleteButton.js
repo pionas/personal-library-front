@@ -25,6 +25,12 @@ export default function UserDeleteButton({ userId, ...remainingProps }) {
                 status: success ? "success" : "error"
             });
         },
+        onError: error => {
+            toast({
+                description: error.message,
+                status: "error"
+            });
+        },
         update: cache => {
             try {
                 const cachedData = cache.readQuery({

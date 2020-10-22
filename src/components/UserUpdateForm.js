@@ -16,12 +16,14 @@ export default function UserUpdateForm({
     isUpdating
 }) {
     const nameRef = useRef();
+    const emailRef = useRef();
     const infoRef = useRef();
     function handleSubmit(e) {
         e.preventDefault();
         onUpdate({
             id: user.id,
             name: nameRef.current.value,
+            email: emailRef.current.value,
             info: infoRef.current.value
         });
     }
@@ -34,6 +36,15 @@ export default function UserUpdateForm({
                     id="name"
                     placeholder="John"
                     defaultValue={user.name}
+                />
+            </FormControl>
+            <FormControl isDisabled={isUpdating}>
+                <FormLabel htmlFor="email">E-mail</FormLabel>
+                <Input
+                    ref={emailRef}
+                    id="email"
+                    placeholder="E-mail"
+                    defaultValue={user.email}
                 />
             </FormControl>
             <FormControl isDisabled={isUpdating}>

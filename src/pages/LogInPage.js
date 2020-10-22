@@ -2,7 +2,7 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import LogInForm from "../components/LogInForm";
 import { useToast } from "../components/Toast";
-import { useAuth } from "../components/AuthProvider";
+import { useAuth, removeAuthToken } from "../components/AuthProvider";
 
 const LOG_IN_MUTATION = gql`
   mutation LogIn($credential: LogInInput!) {
@@ -18,6 +18,7 @@ export default function LogInPage() {
     const toast = useToast();
     const [logIn, { loading }] = useMutation(LOG_IN_MUTATION, {
         onCompleted: ({ logIn: { success, message, token } }) => {
+            removeAuthToken();
             toast({
                 description: message,
                 status: success ? "success" : "error"
