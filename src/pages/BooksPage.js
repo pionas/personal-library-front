@@ -20,6 +20,7 @@ export default function BooksPage() {
     "/books/search/"
   );
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [tryLoading, setTryLoading] = useState(false);
 
   const { loading, error, data, fetchMore } = useQuery(GET_BOOKS_QUERY, {
     variables: { searchQuery }
@@ -38,6 +39,7 @@ export default function BooksPage() {
         searchQuery={searchQuery}
         onSearchQueryChange={handleSearchQueryChange}
       />
+      {tryLoading ? (<p>Loading...</p>) : null}
       {hasBooks ? (
         <>
           {books.map(book => (
@@ -48,9 +50,11 @@ export default function BooksPage() {
           <SimplePagination
             pageNumber={currentPageNumber}
             onPageChange={(pageNumber) => {
+              setTryLoading(true);
               fetchMore({
                 variables: { pageNumber },
                 updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+                  setTryLoading(false);
                   if (!fetchMoreResult) {
                     return previousQueryResult;
                   }
