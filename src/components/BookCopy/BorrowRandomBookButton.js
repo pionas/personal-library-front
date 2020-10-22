@@ -3,7 +3,6 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { GET_USER_QUERY } from "../../pages/UserDetailsPage";
 import { BOOK_COPY_FIELDS_FRAGMENT } from "./fragments";
-
 const BORROW_RANDOM_BOOK_COPY_MUTATION = gql`
   mutation BorrowRandomBook {
     borrowRandomBook {
@@ -50,17 +49,24 @@ export default function BorrowRandomBookButton() {
         });
       },
       update: (cache, { data: { borrowRandomBook } }) => {
-        const cachedData = cache.readQuery({
-          query: GET_USER_QUERY,
-          variables: { userId: borrowRandomBook.borrower.id }
-        });
-        const data = JSON.parse(JSON.stringify(cachedData));
-        data.user.borrowedBookCopies.push(borrowRandomBook);
-        cache.writeQuery({
-          query: GET_USER_QUERY,
-          variables: { userId: borrowRandomBook.borrower.id },
-          data
-        });
+        if (!borrowRandomBook || !borrowRandomBook.borrower || !borrowRandomBook.borrower.id) {
+          return;
+        }
+        try {
+          const cachedData = cache.readQuery({
+            query: GET_USER_QUERY,
+            variables: { userId: borrowRandomBook.borrower.id }
+          });
+          const data = JSON.parse(JSON.stringify(cachedData));
+          data.user.borrowedBookCopies.push(borrowRandomBook);
+          cache.writeQuery({
+            query: GET_USER_QUERY,
+            variables: { userId: borrowRandomBook.borrower.id },
+            data
+          });
+        } catch (error) {
+          // console.log(error);
+        }
       }
     });
 

@@ -6,7 +6,7 @@ import { useAuth } from "../AuthProvider";
 
 export default function BookCopyActions({ bookCopy, ...remainingProps }) {
   const { currentUser } = useAuth();
-  const canBeReturned = !!bookCopy.borrower && currentUser && currentUser.id == bookCopy.borrower.id;
+  const canBeReturned = !!bookCopy.borrower && currentUser && currentUser.id === bookCopy.borrower.id;
   const canBeBorrowed = !bookCopy.borrower && currentUser;
 
   return (
