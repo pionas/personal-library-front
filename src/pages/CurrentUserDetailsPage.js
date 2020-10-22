@@ -30,7 +30,6 @@ export default function CurrentUserDetailsPage() {
         return <p>Loading...</p>;
     }
     if (error) {
-        console.log(error);
         return <p>Could not load currentUser...</p>;
     }
     const { currentUser } = data;

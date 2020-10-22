@@ -6,9 +6,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { CSSReset, ThemeProvider, theme } from "@chakra-ui/core";
 
 import App from "./App";
-import AuthProvider from "./components/AuthProvider";
+import AuthProvider, { getAuthToken } from "./components/AuthProvider";
 
-const GRAPHQL_ENDPOINT = "https://ancient-badlands-11449.herokuapp.com/";
+const GRAPHQL_ENDPOINT = "http://localhost:4000/";
+const token = getAuthToken();
 
 const cache = new InMemoryCache({
   addTypename: true,
@@ -20,6 +21,9 @@ const cache = new InMemoryCache({
 });
 const client = new ApolloClient({
   uri: GRAPHQL_ENDPOINT,
+  headers: {
+    Authorization: token ? `Bearer ${token}` : null
+  },
   cache
 });
 

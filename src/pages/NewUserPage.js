@@ -34,6 +34,12 @@ export default function NewUserPage() {
     const [createUser, { loading: isCreating }] = useMutation(
         CREATE_USER_MUTATION,
         {
+            onError: error => {
+                toast({
+                    description: error.message,
+                    status: "error"
+                });
+            },
             onCompleted: ({ createUser }) => {
                 const { success, message, user } = createUser;
                 toast({
@@ -45,6 +51,9 @@ export default function NewUserPage() {
                 }
             },
             update: (cache, { data: { createUser } }) => {
+                if (!createUser || !createUser.user) {
+                    return;
+                }
                 try {
                     const cachedData = cache.readQuery({
                         query: ALL_USERS_QUERY,

@@ -17,12 +17,14 @@ export default function UserCreateForm({
 }) {
     const nameRef = useRef();
     const emailRef = useRef();
+    const passRef = useRef();
     const infoRef = useRef();
     function handleSubmit(e) {
         e.preventDefault();
         onCreate({
             name: nameRef.current.value,
             email: emailRef.current.value,
+            password: passRef.current.value,
             info: infoRef.current.value
         });
     }
@@ -39,6 +41,15 @@ export default function UserCreateForm({
                     type="email"
                     id="email"
                     placeholder="john@example.com"
+                />
+            </FormControl>
+            <FormControl isDisabled={isCreating}>
+                <FormLabel htmlFor="pass">Password</FormLabel>
+                <Input
+                    ref={passRef}
+                    type="password"
+                    id="pass"
+                    placeholder="Password"
                 />
             </FormControl>
             <FormControl isDisabled={isCreating}>

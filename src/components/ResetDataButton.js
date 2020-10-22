@@ -15,6 +15,16 @@ const RESET_DATA_MUTATION = gql`
 export default function ResetDataButton(props) {
     const toast = useToast();
     const [resetData, { loading, client }] = useMutation(RESET_DATA_MUTATION, {
+        onError: error => {
+            toast({
+                title: "Error",
+                description: error.message,
+                status: "error",
+                duration: 1000,
+                position: "top",
+                isClosable: true
+            });
+        },
         onCompleted: ({ resetData: { success, message } }) => {
             toast({
                 description: message,
