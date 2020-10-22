@@ -25,8 +25,8 @@ export default function AuthorsPage() {
   );
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
-  const { loading, error, data } = useQuery(ALL_AUTHORS_QUERY, {
-    variables: { searchQuery, pageNumber: currentPageNumber }
+  const { loading, error, data, fetchMore } = useQuery(ALL_AUTHORS_QUERY, {
+    variables: { searchQuery }
   });
 
   if (loading) {
@@ -61,6 +61,15 @@ export default function AuthorsPage() {
           <SimplePagination
             pageNumber={currentPageNumber}
             onPageChange={(pageNumber) => {
+              fetchMore({
+                variables: { pageNumber },
+                updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return previousQueryResult;
+                  }
+                  return fetchMoreResult;
+                }
+              });
               setCurrentPageNumber(pageNumber);
             }}
           />

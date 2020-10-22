@@ -21,8 +21,8 @@ export default function BooksPage() {
   );
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
-  const { loading, error, data } = useQuery(GET_BOOKS_QUERY, {
-    variables: { searchQuery, pageNumber: currentPageNumber }
+  const { loading, error, data, fetchMore } = useQuery(GET_BOOKS_QUERY, {
+    variables: { searchQuery }
   });
   if (loading) {
     return <p>Loading...</p>;
@@ -48,6 +48,15 @@ export default function BooksPage() {
           <SimplePagination
             pageNumber={currentPageNumber}
             onPageChange={(pageNumber) => {
+              fetchMore({
+                variables: { pageNumber },
+                updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return previousQueryResult;
+                  }
+                  return fetchMoreResult;
+                }
+              });
               setCurrentPageNumber(pageNumber);
             }}
           />

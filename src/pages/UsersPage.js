@@ -24,8 +24,8 @@ export default function UsersPage() {
     "/users/search/"
   );
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
-  const { loading, error, data } = useQuery(ALL_USERS_QUERY, {
-    variables: { searchQuery, pageNumber: currentPageNumber }
+  const { loading, error, data, fetchMore } = useQuery(ALL_USERS_QUERY, {
+    variables: { searchQuery }
   });
 
   if (loading) {
@@ -60,6 +60,15 @@ export default function UsersPage() {
           <SimplePagination
             pageNumber={currentPageNumber}
             onPageChange={(pageNumber) => {
+              fetchMore({
+                variables: { pageNumber },
+                updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return previousQueryResult;
+                  }
+                  return fetchMoreResult;
+                }
+              });
               setCurrentPageNumber(pageNumber);
             }}
           />
