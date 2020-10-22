@@ -64,9 +64,7 @@ export default function BorrowRandomBookButton() {
             variables: { userId: borrowRandomBook.borrower.id },
             data
           });
-        } catch (error) {
-          // console.log(error);
-        }
+        } catch (error) { }
       }
     });
 
