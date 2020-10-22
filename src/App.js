@@ -32,13 +32,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<BooksPage />} />
         <Route path="books/:bookId" element={<BookDetailsPage />} />
-        <Route path="books/search/:searchQuery" element={<BooksPage />} />
+        <Route path="books/search/:encodedSearchQuery" element={<BooksPage />} />
         <Route path="books/search/" element={<BooksPage />} />
         <Route path="users/" element={<UsersPage />} />
         <Route path="users/:userId" element={<UserDetailsPage />} />
         <Route path="users/:userId/edit" element={<EditUserPage />} />
         <Route path="users/new" element={<NewUserPage />} />
-        <Route path="users/search/:searchQuery" element={<UsersPage />} />
+        <Route path="users/search/:encodedSearchQuery" element={<UsersPage />} />
         <Route path="users/search/" element={<UsersPage />} />
         <Route path="me/" element={<CurrentUserDetailsPage />} />
         <Route path="signup/" element={<SignUpPage />} />
@@ -48,7 +48,7 @@ export default function App() {
         <Route path="authors/:authorId" element={<AuthorDetailsPage />} />
         <Route path="authors/:authorId/edit" element={<EditAuthorPage />} />
         <Route path="authors/new" element={<NewAuthorPage />} />
-        <Route path="authors/search/:searchQuery" element={<AuthorsPage />} />
+        <Route path="authors/search/:encodedSearchQuery" element={<AuthorsPage />} />
         <Route path="authors/search/" element={<AuthorsPage />} />
         <Route path="admin/resource/:anyId" element={<ResourceDetailsPage />} />
         <Route path="admin/resources" element={<ResourcesPage />} />
