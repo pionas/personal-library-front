@@ -18,9 +18,6 @@ export default function CurrentUserDetails({ currentUser }) {
   return (
     <Stack>
       <UserDetails user={currentUser} />
-      <AdminActions>
-        <ButtonLink to={`/users/${currentUser.id}/edit`}>Edit profile</ButtonLink>
-      </AdminActions>
     </Stack>
   );
 }

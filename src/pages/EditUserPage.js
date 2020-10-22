@@ -35,6 +35,12 @@ export default function EditUserPage() {
             if (success) {
                 navigate(`/users/${userId}`);
             }
+        },
+        onError: error => {
+            toast({
+                description: error.message,
+                status: "error"
+            });
         }
     }
     );
