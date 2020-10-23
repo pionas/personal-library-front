@@ -7,7 +7,6 @@ import UserDetails, {
 } from "../components/UserDetails";
 import BookCopy from "../components/BookCopy";
 import { BOOK_COPY_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
-import BorrowRandomBookButton from "../components/BookCopy/BorrowRandomBookButton";
 import AdminActions from "../components/AdminActions";
 import ResetDataButton from "../components/ResetDataButton";
 import ButtonLink from "../components/ButtonLink";
@@ -52,7 +51,6 @@ export default function UserDetailsPage() {
         <UserDeleteButton userId={user.id} />
         <ResetDataButton />
       </AdminActions>
-      <BorrowRandomBookButton />
       <Heading as="h3" size="lg" textAlign="center">
         Owned books
       </Heading>

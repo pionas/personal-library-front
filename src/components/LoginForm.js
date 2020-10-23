@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/core";
 import Link from "./Link";
 
-export default function UserCreateForm({
+export default function LogInForm({
     onLogIn,
     isLoggingIn,
     ...remainingProps

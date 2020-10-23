@@ -2,10 +2,12 @@ import React from "react";
 import { useQuery, gql } from "@apollo/client";
 import { Flex, Heading, Stack } from "@chakra-ui/core";
 import BookCopy from "../components/BookCopy";
+import BorrowRandomBookButton from "../components/BookCopy/BorrowRandomBookButton";
 import { BOOK_COPY_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 import CurrentUserDetails, {
     CURRENT_USER_DETAILS_FIELDS_FRAGMENT
 } from "../components/CurrentUserDetails";
+import { GET_USER_QUERY } from "../pages/UserDetailsPage";
 
 export const GET_CURRENT_USER_QUERY = gql`
   query GetCurrentUser {
@@ -24,7 +26,7 @@ export const GET_CURRENT_USER_QUERY = gql`
 `;
 
 export default function CurrentUserDetailsPage() {
-    const { loading, error, data } = useQuery(GET_CURRENT_USER_QUERY);
+    const { loading, error, data, client: { cache } } = useQuery(GET_CURRENT_USER_QUERY);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -36,6 +38,25 @@ export default function CurrentUserDetailsPage() {
     if (!currentUser) {
         return <p>You need to be logged in to see this page</p>;
     }
+    try {
+        const cachedData = cache.readQuery({
+            query: GET_USER_QUERY,
+            variables: { userId: currentUser.id }
+        });
+        const data = JSON.parse(JSON.stringify(cachedData));
+        data.user.isAdmin = currentUser.isAdmin;
+        cache.writeQuery({
+            query: GET_USER_QUERY,
+            variables: { userId: currentUser.id },
+            data
+        });
+    } catch (error) {
+        cache.writeQuery({
+            query: GET_USER_QUERY,
+            variables: { userId: currentUser.id },
+            data: { user: currentUser }
+        });
+    };
     return (
         <Stack>
             <CurrentUserDetails currentUser={currentUser} />
@@ -44,6 +65,7 @@ export default function CurrentUserDetailsPage() {
                     <Heading as="h3" size="lg" textAlign="center">
                         Your books
           </Heading>
+                    <BorrowRandomBookButton />
                     <Flex wrap="wrap">
                         {currentUser.ownedBookCopies.map(bookCopy => (
                             <BookCopy
