@@ -13,7 +13,7 @@ import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_USERS_QUERY = gql`
   query AllUsers($searchQuery: String!, $pageNumber: Int = 1) {
-    users(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
+    users(searchQuery: $searchQuery, pageSize: 4, pageNumber: $pageNumber) {
       results {
         ...userFields
       }

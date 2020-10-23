@@ -13,7 +13,7 @@ import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_AUTHORS_QUERY = gql`
   query AllAuthors($searchQuery: String!, $pageNumber: Int = 1) {
-    authors(searchQuery: $searchQuery, pageSize: 6, pageNumber: $pageNumber) {
+    authors(searchQuery: $searchQuery, pageSize: 4, pageNumber: $pageNumber) {
       results {
         ...authorFields
       }
