@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Box, CircularProgress, Stack, Text } from "@chakra-ui/core";
+import { Box, CircularProgress } from "@chakra-ui/core";
 import Book, { BOOK_FIELDS_FRAGMENT } from "../components/Book";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
@@ -22,27 +22,6 @@ const GET_BOOKS_QUERY = gql`
   ${PAGE_INFO_FIELDS_FRAGMENT}
 `;
 
-function updateQueryByReplacing(previousQueryResult, { fetchMoreResult }) {
-  if (!fetchMoreResult) {
-    return previousQueryResult;
-  }
-  return fetchMoreResult;
-}
-
-function updateQueryByAppending(previousQueryResult, { fetchMoreResult }) {
-  if (!fetchMoreResult) {
-    return previousQueryResult;
-  }
-  return {
-    books: {
-      results: [
-        ...previousQueryResult.books.results,
-        ...fetchMoreResult.books.results
-      ],
-      pageInfo: { ...fetchMoreResult.books.pageInfo }
-    }
-  };
-}
 export default function BooksPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/books/search/"
@@ -66,11 +45,6 @@ export default function BooksPage() {
         searchQuery={searchQuery}
         onSearchQueryChange={handleSearchQueryChange}
       />
-      {tryLoading ? (
-        <Stack m="0" p="3" bg="red.200" direction="row">
-          <CircularProgress isIndeterminate color="black.200" />
-          <Text>Loading...</Text>
-        </Stack>) : null}
       {hasBooks ? (
         <>
           {books.map(book => (
@@ -78,19 +52,16 @@ export default function BooksPage() {
               <Book {...book} />
             </Link>
           ))}
+
+          {tryLoading ? (
+            <Box display="flex" alignItems="center" justifyContent="space-between" bg="gray.200" pos="fixed" top="0" left="0" h="100%" w="100%" zIndex={2} opacity="0.3">
+              <CircularProgress isIndeterminate color="black.200" size="120px" w="100%" />
+            </Box>) : null}
           <Pagination
+            queryName={"books"}
             pageInfo={pageInfo}
-            resourcesLength={books.length}
-            onPageChange={(pageNumber) => {
-              setTryLoading(true);
-              fetchMore({
-                variables: { pageNumber },
-                updateQuery: (previousQueryResult, options) => {
-                  setTryLoading(false);
-                  return updateQueryByAppending(previousQueryResult, options);
-                }
-              });
-            }}
+            fetchMore={fetchMore}
+            setTryLoading={setTryLoading}
           />
         </>
       ) : (

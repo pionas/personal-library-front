@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import User, { USER_FIELDS_FRAGMENT } from "../components/User";
-import { SimpleGrid, Stack } from "@chakra-ui/core";
+import { CircularProgress, SimpleGrid, Stack, Box } from "@chakra-ui/core";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
 import AdminActions from "../components/AdminActions";
@@ -30,6 +30,8 @@ export default function UsersPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/users/search/"
   );
+  const [tryLoading, setTryLoading] = useState(false);
+
   const { loading, error, data, fetchMore } = useQuery(ALL_USERS_QUERY, {
     variables: { searchQuery }
   });
@@ -63,19 +65,15 @@ export default function UsersPage() {
               </Stack>
             ))}
           </SimpleGrid>
+          {tryLoading ? (
+            <Box display="flex" alignItems="center" justifyContent="space-between" bg="gray.200" pos="fixed" top="0" left="0" h="100%" w="100%" zIndex={2} opacity="0.3">
+              <CircularProgress isIndeterminate color="black.200" size="120px" w="100%" />
+            </Box>) : null}
           <Pagination
+            queryName={"users"}
             pageInfo={pageInfo}
-            onPageChange={(pageNumber) => {
-              fetchMore({
-                variables: { pageNumber },
-                updateQuery: (previousQueryResult, { fetchMoreResult }) => {
-                  if (!fetchMoreResult) {
-                    return previousQueryResult;
-                  }
-                  return fetchMoreResult;
-                }
-              });
-            }}
+            fetchMore={fetchMore}
+            setTryLoading={setTryLoading}
           />
         </>
       ) : (
