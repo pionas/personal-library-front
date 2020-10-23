@@ -8,12 +8,12 @@ import AdminActions from "../components/AdminActions";
 import ResetDataButton from "../components/ResetDataButton";
 import AuthorDeleteButton from "../components/AuthorDeleteButton";
 import ButtonLink from "../components/ButtonLink";
-import SimplePagination from "../components/SimplePagination";
+import Pagination from "../components/SimplePagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_AUTHORS_QUERY = gql`
   query AllAuthors($searchQuery: String!, $pageNumber: Int = 1) {
-    paginatedAuthors(searchQuery: $searchQuery, pageSize: 6, pageNumber: $pageNumber) {
+    authors(searchQuery: $searchQuery, pageSize: 6, pageNumber: $pageNumber) {
       results {
         ...authorFields
       }
@@ -41,8 +41,7 @@ export default function AuthorsPage() {
   if (error) {
     return <p>Could not load authors...</p>;
   }
-  const { paginatedAuthors } = data;
-  const { results: authors, pageInfo } = paginatedAuthors;
+  const { authors: { results: authors, pageInfo } } = data;
   const hasAuthors = authors.length > 0;
   return (
     <Stack w="100%">
@@ -65,7 +64,7 @@ export default function AuthorsPage() {
               </Stack>
             ))}
           </SimpleGrid>
-          <SimplePagination
+          <Pagination
             pageInfo={pageInfo}
             onPageChange={(pageNumber) => {
               fetchMore({

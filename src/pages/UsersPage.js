@@ -8,12 +8,12 @@ import AdminActions from "../components/AdminActions";
 import ResetDataButton from "../components/ResetDataButton";
 import UserDeleteButton from "../components/UserDeleteButton";
 import ButtonLink from "../components/ButtonLink";
-import SimplePagination from "../components/SimplePagination";
+import Pagination from "../components/ComplexPagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 export const ALL_USERS_QUERY = gql`
   query AllUsers($searchQuery: String!, $pageNumber: Int = 1) {
-    paginatedUsers(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
+    users(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
       results {
         ...userFields
       }
@@ -40,8 +40,7 @@ export default function UsersPage() {
   if (error) {
     return <p>Could not load users...</p>;
   }
-  const { paginatedUsers } = data;
-  const { results: users, pageInfo } = paginatedUsers;
+  const { users: { results: users, pageInfo } } = data;
   const hasUsers = users.length > 0;
   return (
     <Stack w="100%">
@@ -64,7 +63,7 @@ export default function UsersPage() {
               </Stack>
             ))}
           </SimpleGrid>
-          <SimplePagination
+          <Pagination
             pageInfo={pageInfo}
             onPageChange={(pageNumber) => {
               fetchMore({

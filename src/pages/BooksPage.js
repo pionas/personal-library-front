@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Box, Stack, Text } from "@chakra-ui/core";
+import { Box, CircularProgress, Stack, Text } from "@chakra-ui/core";
 import Book, { BOOK_FIELDS_FRAGMENT } from "../components/Book";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
-import SimplePagination from "../components/SimplePagination";
+import Pagination from "../components/ComplexPagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 const GET_BOOKS_QUERY = gql`
   query GetBooks($searchQuery: String!, $pageNumber: Int = 0) {
-    paginatedBooks(searchQuery: $searchQuery, limit: 3, offset: $pageNumber) {
+    books(searchQuery: $searchQuery, limit: 3, offset: $pageNumber) {
       results {
         ...bookFields
       }
@@ -37,8 +37,7 @@ export default function BooksPage() {
   if (error) {
     return <p>Could not load books</p>;
   }
-  const { paginatedBooks } = data;
-  const { results: books, pageInfo } = paginatedBooks;
+  const { books: { results: books, pageInfo } } = data;
   const hasBooks = books.length > 0;
   return (
     <Box w="100%">
@@ -48,6 +47,7 @@ export default function BooksPage() {
       />
       {tryLoading ? (
         <Stack m="0" p="3" bg="red.200" direction="row">
+          <CircularProgress isIndeterminate color="black.200" />
           <Text>Loading...</Text>
         </Stack>) : null}
       {hasBooks ? (
@@ -57,7 +57,7 @@ export default function BooksPage() {
               <Book {...book} />
             </Link>
           ))}
-          <SimplePagination
+          <Pagination
             pageInfo={pageInfo}
             resourcesLength={books.length}
             onPageChange={(pageNumber) => {

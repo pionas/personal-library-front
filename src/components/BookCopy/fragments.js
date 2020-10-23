@@ -32,8 +32,12 @@ export const PAGE_INFO_FIELDS_FRAGMENT = gql`
     currentPageNumber
     nextPageNumber
     previousPageNumber
-    currentOffset
+    firstPageNumber
+    lastPageNumber
+    currentPageOffset
     nextPageOffset
     previousPageOffset
+    firstPageOffset
+    lastPageOffset
   }
 `;
