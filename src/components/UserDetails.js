@@ -25,9 +25,11 @@ export default function User({ user }) {
           <Heading mx="4" color="gray.700">
             {`${user.name} <${user.email}>`}
           </Heading>
-          <Text as="strong">
-            {user.isAdmin ? "You are an admin" : "You are not an admin"}
-          </Text>
+          {user.isAdmin ? (
+            <Text as="strong">
+              {user.isAdmin ? "You are an admin" : "You are not an admin"}
+            </Text>
+          ) : null}
         </Flex>
         <Box as="article">{user.info}</Box>
       </Flex>
