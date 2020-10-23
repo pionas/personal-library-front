@@ -4,7 +4,7 @@ import { Box, CircularProgress, Stack, Text } from "@chakra-ui/core";
 import Book, { BOOK_FIELDS_FRAGMENT } from "../components/Book";
 import Link from "../components/Link";
 import SearchBox, { useSearchQuery } from "../components/SearchBox";
-import Pagination from "../components/ComplexPagination";
+import Pagination from "../components/LoadMorePagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 const GET_BOOKS_QUERY = gql`
@@ -22,6 +22,27 @@ const GET_BOOKS_QUERY = gql`
   ${PAGE_INFO_FIELDS_FRAGMENT}
 `;
 
+function updateQueryByReplacing(previousQueryResult, { fetchMoreResult }) {
+  if (!fetchMoreResult) {
+    return previousQueryResult;
+  }
+  return fetchMoreResult;
+}
+
+function updateQueryByAppending(previousQueryResult, { fetchMoreResult }) {
+  if (!fetchMoreResult) {
+    return previousQueryResult;
+  }
+  return {
+    books: {
+      results: [
+        ...previousQueryResult.books.results,
+        ...fetchMoreResult.books.results
+      ],
+      pageInfo: { ...fetchMoreResult.books.pageInfo }
+    }
+  };
+}
 export default function BooksPage() {
   const [searchQuery, handleSearchQueryChange] = useSearchQuery(
     "/books/search/"
@@ -64,12 +85,9 @@ export default function BooksPage() {
               setTryLoading(true);
               fetchMore({
                 variables: { pageNumber },
-                updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+                updateQuery: (previousQueryResult, options) => {
                   setTryLoading(false);
-                  if (!fetchMoreResult) {
-                    return previousQueryResult;
-                  }
-                  return fetchMoreResult;
+                  return updateQueryByAppending(previousQueryResult, options);
                 }
               });
             }}

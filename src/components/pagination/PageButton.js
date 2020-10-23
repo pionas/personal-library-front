@@ -2,16 +2,15 @@ import { Button } from "@chakra-ui/core";
 import React from "react";
 
 export default function PageButton({
-    disabled,
     newPageNumber,
     currentPageNumber,
     onPageChange,
     children,
-    remainingProps
+    ...remainingProps
 }) {
     return (
         <Button
-            disabled={disabled || (!newPageNumber || newPageNumber === currentPageNumber)}
+            disabled={!newPageNumber || newPageNumber === currentPageNumber}
             onClick={() => onPageChange(newPageNumber)}
             {...remainingProps}
         >
