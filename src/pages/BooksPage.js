@@ -8,8 +8,8 @@ import Pagination from "../components/ComplexPagination";
 import { PAGE_INFO_FIELDS_FRAGMENT } from "../components/BookCopy/fragments";
 
 const GET_BOOKS_QUERY = gql`
-  query GetBooks($searchQuery: String!, $pageNumber: Int = 0) {
-    books(searchQuery: $searchQuery, limit: 3, offset: $pageNumber) {
+  query GetBooks($searchQuery: String!, $pageNumber: Int = 1) {
+    books(searchQuery: $searchQuery, pageSize: 3, pageNumber: $pageNumber) {
       results {
         ...bookFields
       }
