@@ -1,44 +1,44 @@
-import { Button, Flex } from "@chakra-ui/core";
+import { Flex } from "@chakra-ui/core";
 import React from "react";
+import PageButton from "../components/pagination/PageButton";
 
 export default function ComplexPagination({ pageInfo, resourcesLength, onPageChange }) {
     const { currentPageNumber, nextPageNumber, previousPageNumber, currentPageOffset, nextPageOffset, previousPageOffset, firstPageNumber, lastPageNumber, firstPageOffset, lastPageOffset } = pageInfo;
-    const firstNumber = (firstPageNumber) ? firstPageNumber : firstPageOffset;
-    const firstNumberDisabled = (firstPageNumber) ? (firstPageNumber === currentPageNumber) : (firstPageOffset === currentPageOffset);
-    const lastNumber = (lastPageNumber) ? lastPageNumber : lastPageOffset;
-    const lastNumberDisabled = (lastPageNumber) ? (lastPageNumber === currentPageNumber) : (lastPageOffset === currentPageOffset);
+    const firstNumber = (firstPageNumber) ? firstPageNumber : (firstPageOffset !== null) ? firstPageOffset : null;
+    const lastNumber = (lastPageNumber) ? lastPageNumber : (lastPageOffset !== null) ? lastPageOffset : null;
     const prevNumber = (previousPageNumber) ? previousPageNumber : (previousPageOffset !== null) ? previousPageOffset : null;
     const nextNumber = (nextPageNumber) ? nextPageNumber : (nextPageOffset) ? nextPageOffset : null;
-    const currentNumber = (currentPageNumber) ? currentPageNumber + "" : (currentPageOffset !== null) ? (currentPageOffset + 1) + " - " + (currentPageOffset + resourcesLength) : null;
+    const currentNumber = (currentPageNumber) ? currentPageNumber : (currentPageOffset !== null) ? currentPageOffset : null;
+    const currentNumberText = (currentPageNumber) ? currentPageNumber + "" : (currentPageOffset !== null) ? (currentPageOffset + 1) + " - " + (currentPageOffset + resourcesLength) : null;
+
+    const commonPageButtonProps = { currentNumber, onPageChange };
     return (
         <Flex justifyContent="space-between" my="5">
-            <Button
-                disabled={firstNumberDisabled}
-                onClick={() => onPageChange(firstNumber)}
-            >
+            <PageButton
+                disabled={firstNumber === null || firstNumber < 0 || firstNumber === currentNumber}
+                newPageNumber={firstNumber} {...commonPageButtonProps}>
                 First Page
-      </Button>
-
-            <Button
+            </PageButton>
+            <PageButton
                 disabled={prevNumber === null || prevNumber < 0}
-                onClick={() => onPageChange(prevNumber)}
-            >
+                newPageNumber={prevNumber} {...commonPageButtonProps}>
                 Previous Page
-      </Button>
-            <Button disabled>{currentNumber}</Button>
-            <Button
+            </PageButton>
+            <PageButton
+                disabled={true}
+                newPageNumber={currentNumber} {...commonPageButtonProps}>
+                {currentNumberText}
+            </PageButton>
+            <PageButton
                 disabled={!nextNumber}
-                onClick={() => onPageChange(nextNumber)}
-            >
+                newPageNumber={nextNumber} {...commonPageButtonProps}>
                 Next Page
-                </Button>
-
-            <Button
-                disabled={lastNumberDisabled}
-                onClick={() => onPageChange(lastNumber)}
-            >
+            </PageButton>
+            <PageButton
+                disabled={!lastNumber || lastNumber === currentNumber}
+                newPageNumber={lastNumber} {...commonPageButtonProps}>
                 Last Page
-      </Button>
+            </PageButton>
         </Flex>
     );
 }
